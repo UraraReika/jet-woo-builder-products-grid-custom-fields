@@ -13,6 +13,8 @@
  */
 
 use Elementor\Controls_Manager;
+use Elementor\Core\Schemes\Typography as Scheme_Typography;
+use Elementor\Group_Control_Typography;
 use Elementor\Repeater;
 
 // If this file is called directly, abort.
@@ -26,6 +28,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 
 		// register controls for Products Grid widget
 		add_action( 'elementor/element/jet-woo-products/section_carousel/after_section_end', [ $this, 'register_custom_fields_controls' ], 10, 2 );
+		add_action( 'elementor/element/jet-woo-products/section_not_found_message_style/after_section_end', [ $this, 'register_custom_fields_style_controls' ], 10, 2 );
 
 		// render meta for passed position
 		add_action( 'jet-woo-builder/products-grid/title-related/custom-fields-render', [ $this, 'render_custom_fields' ], 10, 4 );
@@ -53,6 +56,40 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$this->add_meta_controls( $obj, 'title_related', esc_html__( 'Before/After Title', 'jet-woo-builder' ) );
 
 		$this->add_meta_controls( $obj, 'content_related', esc_html__( 'Before/After Content', 'jet-woo-builder' ) );
+
+		$obj->end_controls_section();
+
+	}
+
+	/**
+	 * Register custom fields style controls
+	 *
+	 * @param $obj
+	 */
+	public function register_custom_fields_style_controls( $obj ) {
+
+		$obj->start_controls_section(
+			'section_custom_fields_style',
+			[
+				'label'      => esc_html__( 'Custom Fields', 'jet-woo-builder' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'show_label' => false,
+			]
+		);
+
+		$this->add_meta_style_controls(
+			$obj,
+			'title_related',
+			esc_html__( 'Before/After Title', 'jet-woo-builder' ),
+			'jet-title-fields'
+		);
+
+		$this->add_meta_style_controls(
+			$obj,
+			'content_related',
+			esc_html__( 'Before/After Content', 'jet-woo-builder' ),
+			'jet-content-fields'
+		);
 
 		$obj->end_controls_section();
 
@@ -169,6 +206,178 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 				'condition'   => [
 					'show_' . $position_slug . '_meta' => 'yes',
 				],
+			]
+		);
+
+	}
+
+	/**
+	 * Add meta controls for selected position
+	 *
+	 * @param string $position_slug
+	 * @param string $position_name
+	 * @param string $base
+	 *
+	 * @return void
+	 */
+	public function add_meta_style_controls( $obj, $position_slug, $position_name, $base ) {
+
+		$obj->add_control(
+			$position_slug . '_meta_styles',
+			[
+				'label'     => sprintf( esc_html__( 'Meta Styles %s', 'jet-woo-builder' ), $position_name ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_bg_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .' . $base => 'background-color: {{VALUE}}',
+				],
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_label_heading',
+			[
+				'label'     => esc_html__( 'Meta Label', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_label_color',
+			[
+				'label'     => esc_html__( 'Color', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-label' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$obj->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => $position_slug . '_meta_label_typography',
+				'scheme'   => Scheme_Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} .' . $base . '__item-label',
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_label_display',
+			[
+				'label'     => esc_html__( 'Display Meta Label and Value', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => '',
+				'options'   => [
+					'inline-block' => esc_html__( 'Inline', 'jet-woo-builder' ),
+					'block'        => esc_html__( 'As Blocks', 'jet-woo-builder' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-label' => 'display: {{VALUE}}',
+					'{{WRAPPER}} .' . $base . '__item-value' => 'display: {{VALUE}}',
+				],
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_label_gap',
+			[
+				'label'     => esc_html__( 'Horizontal Gap Between Label and Value', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 5,
+				'min'       => 0,
+				'max'       => 20,
+				'step'      => 1,
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-label' => 'margin-right: {{VALUE}}px',
+				],
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_value_heading',
+			[
+				'label'     => esc_html__( 'Meta Value', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_color',
+			[
+				'label'     => esc_html__( 'Color', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-value' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$obj->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => $position_slug . '_meta_typography',
+				'selector' => '{{WRAPPER}} .' . $base . '__item-value',
+			]
+		);
+
+		$obj->add_responsive_control(
+			$position_slug . '_meta_margin',
+			[
+				'label'      => esc_html__( 'Margin', 'jet-woo-builder' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors'  => [
+					'{{WRAPPER}} .' . $base => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator'  => 'before',
+			]
+		);
+
+		$obj->add_responsive_control(
+			$position_slug . '_meta_padding',
+			[
+				'label'      => esc_html__( 'Padding', 'jet-woo-builder' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors'  => [
+					'{{WRAPPER}} .' . $base => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$obj->add_responsive_control(
+			$position_slug . '_meta_border_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'jet-woo-builder' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .' . $base => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$obj->add_responsive_control(
+			$position_slug . '_meta_align',
+			[
+				'label'     => esc_html__( 'Alignment', 'jet-woo-builder' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => jet_woo_builder_tools()->get_available_h_align_types( true ),
+				'selectors' => [
+					'{{WRAPPER}} .' . $base => 'text-align: {{VALUE}};',
+				],
+				'classes'   => 'elementor-control-align',
 			]
 		);
 
