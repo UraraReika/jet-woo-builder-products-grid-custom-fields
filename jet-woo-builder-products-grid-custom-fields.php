@@ -53,9 +53,17 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 			]
 		);
 
-		$this->add_meta_controls( $obj, 'title_related', esc_html__( 'Before/After Title', 'jet-woo-builder' ) );
+		$this->add_meta_controls(
+			$obj,
+			'title_related',
+			esc_html__( 'Before/After Title', 'jet-woo-builder' )
+		);
 
-		$this->add_meta_controls( $obj, 'content_related', esc_html__( 'Before/After Content', 'jet-woo-builder' ) );
+		$this->add_meta_controls(
+			$obj,
+			'content_related',
+			esc_html__( 'Before/After Content', 'jet-woo-builder' )
+		);
 
 		$obj->end_controls_section();
 

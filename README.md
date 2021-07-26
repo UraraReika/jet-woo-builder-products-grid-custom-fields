@@ -5,4 +5,4 @@ setup their position and some basic styles.
 
 ### Products Grid widget
 All you need to do is activate the plugin. Then open plugin folder and inside you will see
-jet-woo-builder folder copy this folder and paste to your child theme.
+`jet-woo-builder` folder copy it and paste to your child theme.
