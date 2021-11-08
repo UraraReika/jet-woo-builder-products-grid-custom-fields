@@ -10,7 +10,7 @@ $title         = jet_woo_builder_tools()->trim_text(
 	$this->get_attr( 'title_trim_type' ),
 	'...'
 );
-$title_link    = jet_woo_builder_template_functions()->get_product_title_link();
+$title_link    = jet_woo_builder_template_functions()->get_product_permalink( $product );
 $title_tag     = ! empty( $this->get_attr( 'title_html_tag' ) ) ? jet_woo_builder_tools()->sanitize_html_tag( $this->get_attr( 'title_html_tag' ) ) : 'h5';
 $title_tooltip = '';
 
