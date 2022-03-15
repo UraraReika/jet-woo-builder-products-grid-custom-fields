@@ -3,7 +3,7 @@
  * Plugin Name: JetWooBuilder - Products Grid Custom Fields
  * Plugin URI:
  * Description:
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-woo-builder
@@ -403,8 +403,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	 */
 	public function render_custom_fields( $position = '', $base = '', $context = [ 'before' ], $obj = null ) {
 
-		$settings = $obj->get_settings();
+		global $product;
 
+		$settings      = $obj->get_settings();
 		$config_key    = $position . '_meta';
 		$show_key      = 'show_' . $position . '_meta';
 		$position_key  = 'meta_' . $position . '_position';
@@ -434,7 +435,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 
 			$key      = $meta['meta_key'];
 			$callback = ! empty( $meta['meta_callback'] ) ? $meta['meta_callback'] : false;
-			$value    = get_post_meta( get_the_ID(), $key, false );
+			$value    = get_post_meta( $product->get_id(), $key, false );
 
 			if ( ! $value ) {
 				continue;
