@@ -426,6 +426,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		}
 
 		$result = '';
+		$order  = '';
 
 		foreach ( $meta_config as $meta ) {
 
@@ -487,13 +488,21 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 				$base, $label, $meta_val, esc_attr( $key )
 			);
 
+			if ( 'preset-1' === $obj->get_attr( 'presets' ) ) {
+				if ( 'title_related' === $position ) {
+					$order = isset( $settings['title_order'] ) ? $settings['title_order'] : '';
+				} elseif ( 'content_related' === $position ) {
+					$order = isset( $settings['excerpt_order'] ) ? $settings['excerpt_order'] : '';
+				}
+			}
+
 		}
 
 		if ( empty( $result ) ) {
 			return;
 		}
 
-		printf( '<div class="%1$s">%2$s</div>', $base, $result );
+		printf( '<div class="%1$s" style="order: %3$s">%2$s</div>', $base, $result, $order );
 
 	}
 
