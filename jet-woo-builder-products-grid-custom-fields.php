@@ -3,7 +3,7 @@
  * Plugin Name: JetWooBuilder - Products Grid Custom Fields
  * Plugin URI:
  * Description:
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-woo-builder
@@ -35,7 +35,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		add_action( 'jet-woo-builder/products-grid/content-related/custom-fields-render', [ $this, 'render_custom_fields' ], 10, 4 );
 
 		// add custom add to cart icon settings to providers settings list
-		add_filter( 'jet-smart-filters/providers/jet-woo-products-grid/settings-list', [ $this, 'add_custom_add_to_cart_icon_settings_to_list' ] );
+		add_filter( 'jet-smart-filters/providers/jet-woo-products-grid/settings-list', [ $this, 'add_custom_fields_settings_to_list' ] );
 
 	}
 
@@ -518,13 +518,13 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
-	 * Returns merged custom icon settings with JetSmartFilters providers settings list
+	 * Returns merged custom fields settings with JetSmartFilters providers settings list.
 	 *
 	 * @param $list
 	 *
 	 * @return array
 	 */
-	public function add_custom_add_to_cart_icon_settings_to_list( $list ) {
+	public function add_custom_fields_settings_to_list( $list ) {
 
 		$custom_icon_settings = [
 			'show_title_related_meta',
