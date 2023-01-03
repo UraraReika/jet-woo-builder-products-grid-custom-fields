@@ -1,9 +1,8 @@
 <?php
 /**
  * Plugin Name: JetWooBuilder - Products Grid Custom Fields
- * Plugin URI:
- * Description:
- * Version:     1.0.2
+ * Plugin URI: https://github.com/UraraReika/jet-woo-builder-products-grid-custom-fields
+ * Version:     1.0.3
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-woo-builder
@@ -26,21 +25,24 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 
 	public function __construct() {
 
-		// register controls for Products Grid widget
+		// Register controls for Products Grid widget.
 		add_action( 'elementor/element/jet-woo-products/section_carousel/after_section_end', [ $this, 'register_custom_fields_controls' ], 10, 2 );
 		add_action( 'elementor/element/jet-woo-products/section_not_found_message_style/after_section_end', [ $this, 'register_custom_fields_style_controls' ], 10, 2 );
 
-		// render meta for passed position
+		// Render meta for passed position.
 		add_action( 'jet-woo-builder/products-grid/title-related/custom-fields-render', [ $this, 'render_custom_fields' ], 10, 4 );
 		add_action( 'jet-woo-builder/products-grid/content-related/custom-fields-render', [ $this, 'render_custom_fields' ], 10, 4 );
 
-		// add custom add to cart icon settings to providers settings list
+		// Add custom fields settings to providers settings list.
 		add_filter( 'jet-smart-filters/providers/jet-woo-products-grid/settings-list', [ $this, 'add_custom_fields_settings_to_list' ] );
 
 	}
 
 	/**
-	 * Register custom fields controls
+	 * Register custom fields controls.
+	 *
+	 * @since  1.0.0
+	 * @access public
 	 *
 	 * @param $obj
 	 */
@@ -49,20 +51,20 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->start_controls_section(
 			'section_products_custom_fields',
 			[
-				'label' => esc_html__( 'Custom Fields', 'jet-woo-builder' ),
+				'label' => __( 'Custom Fields', 'jet-woo-builder' ),
 			]
 		);
 
 		$this->add_meta_controls(
 			$obj,
 			'title_related',
-			esc_html__( 'Before/After Title', 'jet-woo-builder' )
+			__( 'Before/After Title', 'jet-woo-builder' )
 		);
 
 		$this->add_meta_controls(
 			$obj,
 			'content_related',
-			esc_html__( 'Before/After Content', 'jet-woo-builder' )
+			__( 'Before/After Content', 'jet-woo-builder' )
 		);
 
 		$obj->end_controls_section();
@@ -70,7 +72,10 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
-	 * Register custom fields style controls
+	 * Register custom fields style controls.
+	 *
+	 * @since  1.0.0
+	 * @access public
 	 *
 	 * @param $obj
 	 */
@@ -79,23 +84,22 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->start_controls_section(
 			'section_custom_fields_style',
 			[
-				'label'      => esc_html__( 'Custom Fields', 'jet-woo-builder' ),
-				'tab'        => Controls_Manager::TAB_STYLE,
-				'show_label' => false,
+				'tab'   => Controls_Manager::TAB_STYLE,
+				'label' => __( 'Custom Fields', 'jet-woo-builder' ),
 			]
 		);
 
 		$this->add_meta_style_controls(
 			$obj,
 			'title_related',
-			esc_html__( 'Before/After Title', 'jet-woo-builder' ),
+			__( 'Before/After Title', 'jet-woo-builder' ),
 			'jet-title-fields'
 		);
 
 		$this->add_meta_style_controls(
 			$obj,
 			'content_related',
-			esc_html__( 'Before/After Content', 'jet-woo-builder' ),
+			__( 'Before/After Content', 'jet-woo-builder' ),
 			'jet-content-fields'
 		);
 
@@ -104,11 +108,16 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
-	 * Add meta controls for selected position
+	 * Add meta controls.
 	 *
-	 * @param        $obj
-	 * @param string $position_slug
-	 * @param string $position_name
+	 * Add meta controls for selected position.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param object $obj           Widget instance.
+	 * @param string $position_slug Position slug.
+	 * @param string $position_name Position name.
 	 *
 	 * @return void
 	 */
@@ -117,21 +126,21 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			'show_' . $position_slug . '_meta',
 			[
-				'label' => sprintf( esc_html__( 'Show Meta %s', 'jet-woo-builder' ), $position_name ),
 				'type'  => Controls_Manager::SWITCHER,
+				'label' => sprintf( __( 'Show Meta %s', 'jet-woo-builder' ), $position_name ),
 			]
 		);
 
 		$obj->add_control(
 			'meta_' . $position_slug . '_position',
 			[
-				'label'     => esc_html__( 'Meta Fields Position', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::SELECT,
-				'default'   => 'before',
+				'label'     => __( 'Meta Fields Position', 'jet-woo-builder' ),
 				'options'   => [
-					'before' => esc_html__( 'Before', 'jet-woo-builder' ),
-					'after'  => esc_html__( 'After', 'jet-woo-builder' ),
+					'before' => __( 'Before', 'jet-woo-builder' ),
+					'after'  => __( 'After', 'jet-woo-builder' ),
 				],
+				'default'   => 'before',
 				'condition' => [
 					'show_' . $position_slug . '_meta' => 'yes',
 				],
@@ -143,28 +152,26 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$repeater->add_control(
 			'meta_key',
 			[
-				'label'       => esc_html__( 'Key', 'jet-woo-builder' ),
-				'description' => esc_html__( 'Meta key from postmeta table in database', 'jet-woo-builder' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
+				'label'       => __( 'Key', 'jet-woo-builder' ),
+				'description' => __( 'Meta key from post meta table in database.', 'jet-woo-builder' ),
 			]
 		);
 
 		$repeater->add_control(
 			'meta_label',
 			[
-				'label'   => esc_html__( 'Label', 'jet-woo-builder' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
+				'type'  => Controls_Manager::TEXT,
+				'label' => __( 'Label', 'jet-woo-builder' ),
 			]
 		);
 
 		$repeater->add_control(
 			'meta_format',
 			[
-				'label'       => esc_html__( 'Value Format', 'jet-woo-builder' ),
-				'description' => esc_html__( 'Value format string, accepts HTML markup. %s - is meta value', 'jet-woo-builder' ),
 				'type'        => Controls_Manager::TEXT,
+				'label'       => __( 'Value Format', 'jet-woo-builder' ),
+				'description' => __( 'Value format string, accepts HTML markup. %s - is meta value.', 'jet-woo-builder' ),
 				'default'     => '%s',
 			]
 		);
@@ -172,28 +179,26 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$repeater->add_control(
 			'meta_callback',
 			[
-				'label'   => esc_html__( 'Prepare meta value with callback', 'jet-woo-builder' ),
 				'type'    => Controls_Manager::SELECT,
-				'default' => '',
+				'label'   => __( 'Prepare meta value with callback', 'jet-woo-builder' ),
 				'options' => apply_filters( 'jet-woo-builder/products-grid/meta_callbacks', [
-					''                        => esc_html__( 'Clean', 'jet-woo-builder' ),
-					'get_permalink'           => esc_html__( 'Get Permalink', 'jet-woo-builder' ),
-					'get_the_title'           => esc_html__( 'Get Title', 'jet-woo-builder' ),
-					'wp_get_attachment_url'   => esc_html__( 'Get Attachment URL', 'jet-woo-builder' ),
-					'wp_get_attachment_image' => esc_html__( 'Get Attachment Image', 'jet-woo-builder' ),
-					'date'                    => esc_html__( 'Format date', 'jet-woo-builder' ),
-					'date_i18n'               => esc_html__( 'Format date (localized)', 'jet-woo-builder' ),
+					''                        => __( 'Clean', 'jet-woo-builder' ),
+					'get_permalink'           => __( 'Get Permalink', 'jet-woo-builder' ),
+					'get_the_title'           => __( 'Get Title', 'jet-woo-builder' ),
+					'wp_get_attachment_url'   => __( 'Get Attachment URL', 'jet-woo-builder' ),
+					'wp_get_attachment_image' => __( 'Format date (localized)', 'jet-woo-builder' ),
 				] ),
+				'default' => '',
 			]
 		);
 
 		$repeater->add_control(
 			'date_format',
 			[
-				'label'       => esc_html__( 'Format', 'jet-woo-builder' ),
 				'type'        => Controls_Manager::TEXT,
+				'label'       => __( 'Format', 'jet-woo-builder' ),
+				'description' => sprintf( '<a href="https://codex.wordpress.org/Formatting_Date_and_Time" target="_blank">%s</a>', __( 'Documentation on date and time formatting.', 'jet-woo-builder' ) ),
 				'default'     => 'F j, Y',
-				'description' => sprintf( '<a href="https://codex.wordpress.org/Formatting_Date_and_Time" target="_blank">%s</a>', esc_html__( 'Documentation on date and time formatting', 'jet-woo-builder' ) ),
 				'condition'   => [
 					'meta_callback' => [ 'date', 'date_i18n' ],
 				],
@@ -207,7 +212,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 				'fields'      => $repeater->get_controls(),
 				'default'     => [
 					[
-						'meta_label' => esc_html__( 'Label', 'jet-woo-builder' ),
+						'meta_label' => __( 'Label', 'jet-woo-builder' ),
 					],
 				],
 				'title_field' => '{{{ meta_key }}}',
@@ -220,11 +225,16 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
-	 * Add meta controls for selected position
+	 * Add meta style controls.
 	 *
-	 * @param string $position_slug
-	 * @param string $position_name
-	 * @param string $base
+	 * Add meta controls for selected position.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param string $position_slug Position slug.
+	 * @param string $position_name Position name.
+	 * @param string $base          Position selector.
 	 *
 	 * @return void
 	 */
@@ -233,8 +243,8 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			$position_slug . '_meta_styles',
 			[
-				'label'     => sprintf( esc_html__( 'Meta Styles %s', 'jet-woo-builder' ), $position_name ),
 				'type'      => Controls_Manager::HEADING,
+				'label'     => sprintf( __( 'Meta Styles %s', 'jet-woo-builder' ), $position_name ),
 				'separator' => 'before',
 			]
 		);
@@ -242,8 +252,8 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			$position_slug . '_meta_bg_color',
 			[
-				'label'     => esc_html__( 'Background Color', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::COLOR,
+				'label'     => __( 'Background Color', 'jet-woo-builder' ),
 				'selectors' => [
 					'{{WRAPPER}} .' . $base => 'background-color: {{VALUE}}',
 				],
@@ -253,20 +263,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			$position_slug . '_meta_label_heading',
 			[
-				'label'     => esc_html__( 'Meta Label', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::HEADING,
+				'label'     => __( 'Meta Label', 'jet-woo-builder' ),
 				'separator' => 'before',
-			]
-		);
-
-		$obj->add_control(
-			$position_slug . '_meta_label_color',
-			[
-				'label'     => esc_html__( 'Color', 'jet-woo-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .' . $base . '__item-label' => 'color: {{VALUE}}',
-				],
 			]
 		);
 
@@ -274,21 +273,31 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => $position_slug . '_meta_label_typography',
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_1,
 				'selector' => '{{WRAPPER}} .' . $base . '__item-label',
+			]
+		);
+
+		$obj->add_control(
+			$position_slug . '_meta_label_color',
+			[
+				'type'      => Controls_Manager::COLOR,
+				'label'     => __( 'Color', 'jet-woo-builder' ),
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-label' => 'color: {{VALUE}}',
+				],
 			]
 		);
 
 		$obj->add_control(
 			$position_slug . '_meta_label_display',
 			[
-				'label'     => esc_html__( 'Display Meta Label and Value', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::SELECT,
-				'default'   => '',
+				'label'     => __( 'Display Meta Label and Value', 'jet-woo-builder' ),
 				'options'   => [
-					'inline-block' => esc_html__( 'Inline', 'jet-woo-builder' ),
-					'block'        => esc_html__( 'As Blocks', 'jet-woo-builder' ),
+					'inline-block' => __( 'Inline', 'jet-woo-builder' ),
+					'block'        => __( 'As Blocks', 'jet-woo-builder' ),
 				],
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .' . $base . '__item-label' => 'display: {{VALUE}}',
 					'{{WRAPPER}} .' . $base . '__item-value' => 'display: {{VALUE}}',
@@ -299,8 +308,8 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			$position_slug . '_meta_label_gap',
 			[
-				'label'     => esc_html__( 'Horizontal Gap Between Label and Value', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::NUMBER,
+				'label'     => __( 'Horizontal Gap Between Label and Value', 'jet-woo-builder' ),
 				'default'   => 5,
 				'min'       => 0,
 				'max'       => 20,
@@ -314,20 +323,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_control(
 			$position_slug . '_meta_value_heading',
 			[
-				'label'     => esc_html__( 'Meta Value', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::HEADING,
+				'label'     => __( 'Meta Value', 'jet-woo-builder' ),
 				'separator' => 'before',
-			]
-		);
-
-		$obj->add_control(
-			$position_slug . '_meta_color',
-			[
-				'label'     => esc_html__( 'Color', 'jet-woo-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .' . $base . '__item-value' => 'color: {{VALUE}}',
-				],
 			]
 		);
 
@@ -339,11 +337,34 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 			]
 		);
 
+		$obj->add_control(
+			$position_slug . '_meta_color',
+			[
+				'type'      => Controls_Manager::COLOR,
+				'label'     => __( 'Color', 'jet-woo-builder' ),
+				'selectors' => [
+					'{{WRAPPER}} .' . $base . '__item-value' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$obj->add_responsive_control(
+			$position_slug . '_meta_border_radius',
+			[
+				'type'       => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Border Radius', 'jet-woo-builder' ),
+				'size_units' => [ 'px', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .' . $base => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
 		$obj->add_responsive_control(
 			$position_slug . '_meta_margin',
 			[
-				'label'      => esc_html__( 'Margin', 'jet-woo-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Margin', 'jet-woo-builder' ),
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors'  => [
 					'{{WRAPPER}} .' . $base => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -355,8 +376,8 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$obj->add_responsive_control(
 			$position_slug . '_meta_padding',
 			[
-				'label'      => esc_html__( 'Padding', 'jet-woo-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Padding', 'jet-woo-builder' ),
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors'  => [
 					'{{WRAPPER}} .' . $base => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -365,22 +386,10 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		);
 
 		$obj->add_responsive_control(
-			$position_slug . '_meta_border_radius',
-			[
-				'label'      => esc_html__( 'Border Radius', 'jet-woo-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .' . $base => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$obj->add_responsive_control(
 			$position_slug . '_meta_align',
 			[
-				'label'     => esc_html__( 'Alignment', 'jet-woo-builder' ),
 				'type'      => Controls_Manager::CHOOSE,
+				'label'     => __( 'Alignment', 'jet-woo-builder' ),
 				'options'   => jet_woo_builder_tools()->get_available_h_align_types( true ),
 				'selectors' => [
 					'{{WRAPPER}} .' . $base => 'text-align: {{VALUE}};',
@@ -392,12 +401,17 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
-	 * Render meta for passed position
+	 * Render custom field.
 	 *
-	 * @param string $position
-	 * @param string $base
-	 * @param array  $context
-	 * @param null   $obj
+	 * Render meta for passed position.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param string $position Position slug.
+	 * @param string $base     Position selector.
+	 * @param array  $context  Usage context.
+	 * @param null   $obj      Widget instance.
 	 *
 	 * @return void
 	 */
@@ -406,12 +420,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		global $product;
 
 		$settings      = $obj->get_settings();
-		$config_key    = $position . '_meta';
-		$show_key      = 'show_' . $position . '_meta';
-		$position_key  = 'meta_' . $position . '_position';
-		$meta_show     = $settings[ $show_key ];
-		$meta_position = $settings[ $position_key ];
-		$meta_config   = $settings[ $config_key ];
+		$meta_show     = $settings[ 'show_' . $position . '_meta' ];
+		$meta_position = $settings[ 'meta_' . $position . '_position' ];
+		$meta_config   = $settings[ $position . '_meta' ];
 
 		if ( 'yes' !== $meta_show ) {
 			return;
@@ -429,7 +440,6 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 		$order  = '';
 
 		foreach ( $meta_config as $meta ) {
-
 			if ( empty( $meta['meta_key'] ) ) {
 				continue;
 			}
@@ -442,21 +452,17 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 				continue;
 			}
 
-			$callback_args = array( $value[0] );
+			$callback_args = [ $value[0] ];
 
 			if ( $callback ) {
-
 				switch ( $callback ) {
-
 					case 'wp_get_attachment_image':
-
 						$callback_args[] = 'full';
 
 						break;
 
 					case 'date':
 					case 'date_i18n':
-
 						$timestamp       = $value[0];
 						$valid_timestamp = $this->is_valid_timestamp( $timestamp );
 
@@ -465,7 +471,7 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 						}
 
 						$format        = ! empty( $meta['date_format'] ) ? $meta['date_format'] : 'F j, Y';
-						$callback_args = array( $format, $timestamp );
+						$callback_args = [ $format, $timestamp ];
 
 						break;
 				}
@@ -490,9 +496,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 
 			if ( 'preset-1' === $obj->get_attr( 'presets' ) ) {
 				if ( 'title_related' === $position ) {
-					$order = isset( $settings['title_order'] ) ? $settings['title_order'] : '';
+					$order = $settings['title_order'] ?? '';
 				} elseif ( 'content_related' === $position ) {
-					$order = isset( $settings['excerpt_order'] ) ? $settings['excerpt_order'] : '';
+					$order = $settings['excerpt_order'] ?? '';
 				}
 			}
 
@@ -518,9 +524,15 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 	}
 
 	/**
+	 * Add custom fields settings to list.
+	 *
 	 * Returns merged custom fields settings with JetSmartFilters providers settings list.
 	 *
-	 * @param $list
+	 * @since  1.0.0
+	 * @since  1.0.3 Added additional settings.
+	 * @access public
+	 *
+	 * @param array $list Stored settings list.
 	 *
 	 * @return array
 	 */
@@ -533,6 +545,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 			'meta_content_related_position',
 			'title_related_meta',
 			'content_related_meta',
+			'title_order',
+			'excerpt_order',
+
 		];
 
 		return array_merge( $list, $custom_icon_settings );
