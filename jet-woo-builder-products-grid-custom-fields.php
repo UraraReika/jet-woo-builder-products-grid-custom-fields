@@ -494,11 +494,15 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 				$base, $label, $meta_val, esc_attr( $key )
 			);
 
-			if ( 'preset-1' === $obj->get_attr( 'presets' ) ) {
+			if ( in_array( $obj->get_attr( 'presets' ), [ 'preset-1', 'preset-2', 'preset-5', 'preset-8' ], true ) ) {
 				if ( 'title_related' === $position ) {
-					$order = $settings['title_order'] ?? '';
+					$order = isset( $settings['title_order'] ) && '' !== $settings['title_order']
+						? $settings['title_order']
+						: 1;
 				} elseif ( 'content_related' === $position ) {
-					$order = $settings['excerpt_order'] ?? '';
+					$order = isset( $settings['excerpt_order'] ) && '' !== $settings['excerpt_order']
+						? $settings['excerpt_order']
+						: 1;
 				}
 			}
 
@@ -508,7 +512,9 @@ class Jet_Woo_Builder_Products_Grid_Custom_Fields {
 			return;
 		}
 
-		printf( '<div class="%1$s" style="order: %3$s">%2$s</div>', $base, $result, $order );
+		$style = '' !== $order ? sprintf( ' style="order: %s"', esc_attr( $order ) ) : '';
+
+		printf( '<div class="%1$s"%3$s>%2$s</div>', $base, $result, $style );
 
 	}
 
